@@ -1,7 +1,12 @@
 RouteOptimization::Application.routes.draw do
-  devise_for :users
+  authenticated :user do
+    root :to => 'home#index'
+  end
 
   devise_scope :user do
-    root :to => "devise/sessions#new"
+    root :to => "devise/registrations#new"
+    match '/user/confirmation' => 'confirmations#update', :via => :put, :as => :update_user_confirmation
   end
+  devise_for :users, :controllers => { :confirmations => "confirmations" }
+  root :to => "home#index"
 end
