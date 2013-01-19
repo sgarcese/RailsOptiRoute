@@ -1,0 +1,45 @@
+<%= form_for @route, :html => { :class => "form-inline" } do |f| %>
+  <% if @route.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@route.errors.count, "error") %> prohibited this route from being saved:</h2>
+
+      <ul>
+      <% @route.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <%= f.fields_for :locations do |l| %>
+    <div class="field">
+      <%= l.label "address" %>
+      <%= l.text_field :address_string %>
+      <span class="verified"></span>
+    </div>
+  <% end %>
+
+  <div class="actions">
+    <%= link_to "Verify My Addresses", "javascript:void(0)", :class => "btn", :id => "verify_addresses" %>
+    <%= f.submit "Create My Route", :class => "btn btn-primary" %>
+  </div>
+<% end %>
+
+<script type="text/javascript">
+  $("a#verify_addresses").click(function(event) {
+    $.ajax({
+      url: "<%= verify_collection_locations_path %>",
+      type: "POST",
+      data: $("form").serialize()
+    }).done(function(data) {
+      jQuery.each(data, function(index, itemData) {
+        var addressInput = $("#route_locations_attributes_"+itemData[0]+"_address_string");
+        if (itemData[1].verified) {
+          $(addressInput).next("span.verified").html("valid");
+        } else {
+          $(addressInput).next("span.verified").html("suggested correction: " + itemData[1].verified_address);
+        }
+      });
+    });
+  });
+</script>

@@ -13,7 +13,11 @@
     <header class="navbar navbar-fixed-top">
       <nav class="navbar-inner">
         <div class="container">
-          <%= render 'layouts/navigation' %>
+          <% if user_signed_in? %>
+            <%= render 'layouts/app_navigation' %>
+          <% else %>
+            <%= render 'layouts/navigation' %>
+          <% end %>
         </div>
       </nav>
     </header>

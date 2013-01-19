@@ -1,0 +1,55 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>User:</b>
+  <%= @location.user_id %>
+</p>
+
+<p>
+  <b>Route:</b>
+  <%= @location.route_id %>
+</p>
+
+<p>
+  <b>Name:</b>
+  <%= @location.name %>
+</p>
+
+<p>
+  <b>Street:</b>
+  <%= @location.street %>
+</p>
+
+<p>
+  <b>Street 2:</b>
+  <%= @location.street_2 %>
+</p>
+
+<p>
+  <b>City:</b>
+  <%= @location.city %>
+</p>
+
+<p>
+  <b>State:</b>
+  <%= @location.state %>
+</p>
+
+<p>
+  <b>Zip:</b>
+  <%= @location.zip %>
+</p>
+
+<p>
+  <b>Start:</b>
+  <%= @location.start %>
+</p>
+
+<p>
+  <b>Finish:</b>
+  <%= @location.finish %>
+</p>
+
+
+<%= link_to 'Edit', edit_location_path(@location) %> |
+<%= link_to 'Back', locations_path %>

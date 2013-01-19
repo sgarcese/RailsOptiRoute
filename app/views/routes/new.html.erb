@@ -1,0 +1,9 @@
+<div class="headline">
+  <% if current_user.routes.any? %>
+    <h2>Add a New Route</h2>
+  <% else %>
+    <h2>Create Your First Route</h2>
+  <% end %>
+</div>
+
+<%= render 'form' %>
