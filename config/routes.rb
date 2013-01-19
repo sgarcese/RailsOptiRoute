@@ -7,6 +7,7 @@ RouteOptimization::Application.routes.draw do
     root :to => "pages#landing"
     match '/user/confirmation' => 'confirmations#update', :via => :put, :as => :update_user_confirmation
   end
+  
   devise_for :users, :controllers => { :confirmations => "confirmations" }
   root :to => "home#landing"
 end
