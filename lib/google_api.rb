@@ -15,6 +15,10 @@ module GoogleAPI
         "Excesive input arguments"
       end
     end
+    class UnsuccessfullConnection <Runtime
+      def message
+        "The connection to the address validation server was unsuccsesful"
+      end
   end
 
   class GoogleLocation
@@ -61,11 +65,22 @@ module GoogleAPI
       params = {:address => @address, :sensor => 'false'}
       uri.query = URI.encode_www_form(params)
       
-      response        = Net::HTTP.get_response(uri)
-      JSON.parse(response.body)
+      response  = Net::HTTP.get_response(uri)
+      if response.is_a?(Net::HTTPSuccess)
+        JSON.parse(response.body)
+      else
+        raise UnsuccessfullConnection
+      end
     end
   end
-
+  class GoogleRoute
+    class Runtime < RuntimeError; end
+    class UnsuccessfullConnection < Runtime
+      def message
+        "The connection to the route optimization server was unsuccsesful"
+      end
+    end
+  end
   class GoogleRoute
     attr_accessor :start, :finish, :waypoints, :distance, :duration, :waypoint_order, :optimized, :json_response
     #assumes that the input is an array of correctly formatted addresses
@@ -77,7 +92,6 @@ module GoogleAPI
       @optimized     = false  
       @json_response = build_response
     end
-    
     
     def get_route
       
@@ -95,9 +109,12 @@ module GoogleAPI
         params  = {origin: start, destination:finish, waypoints:"optimize:true|#{waypoints.join("|")}"}
         uri.query = URI.encode_www_form(params)
 
-        response             = Net::HTTP.get_response(uri)
-        JSON.parse(response.body)
+        response                  = Net::HTTP.get_response(uri)
+        if response.is_a?(Net::HTTPSuccess)
+          JSON.parse(response.body)
+        else
+          raise UnsuccessfullConnection
+        end
       end
-    
   end
 end
