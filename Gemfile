@@ -13,7 +13,7 @@ group :assets do
 end
 
 gem 'jquery-rails'
-gem 'twitter-bootstrap-rails'
+gem 'bootstrap-sass'
 
 group :development do
   gem 'heroku_san'
