@@ -11,13 +11,35 @@
     </div>
   <% end %>
 
+  <% index = 0 %>
   <%= f.fields_for :locations do |l| %>
+    <% index += 1 %>
+    <legend>Location <%= index %></legend>
     <div class="field">
+      <%= l.label "name" %>
+      <%= l.text_field :name %>
       <%= l.label "address" %>
-      <%= l.text_field :address_string %>
+      <%= l.text_field :address_string, :class => "input-xxlarge" %>
       <span class="verified"></span>
     </div>
+
   <% end %>
+
+  <div id="change_address" class="change-address modal hide fade">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+      <h3 id="myModalLabel">Modal header</h3>
+    </div>
+    <div class="modal-body">
+      <p class="address"></p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+      <button class="btn btn-primary">Use Verified Address</button>
+    </div>
+  </div>
+
+  <br />
 
   <div class="actions">
     <%= link_to "Verify My Addresses", "javascript:void(0)", :class => "btn", :id => "verify_addresses" %>

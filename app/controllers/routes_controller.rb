@@ -28,14 +28,12 @@ class RoutesController < ApplicationController
     end
   end
 
-  # GET /routes/1/edit
   def edit
     @route = Route.find(params[:id])
   end
 
-  # POST /routes
-  # POST /routes.json
   def create
+    params[:route][:locations_attributes].delete_if{ |index, hash| hash[:address_string].blank? }
     @route = Route.new(params[:route])
 
     respond_to do |format|
@@ -43,6 +41,8 @@ class RoutesController < ApplicationController
         format.html { redirect_to @route, notice: 'Route was successfully created.' }
         format.json { render json: @route, status: :created, location: @route }
       else
+        locations_to_build = 5 - @route.locations.to_a.count
+        locations_to_build.times { |i| @route.locations.build }
         format.html { render action: "new" }
         format.json { render json: @route.errors, status: :unprocessable_entity }
       end
