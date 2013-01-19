@@ -34,4 +34,6 @@ RouteOptimization::Application.configure do
 
   # Expands the lines which load the assets
   config.assets.debug = true
+
+  config.action_mailer.default_url_options = { :protocol => "http", :host => 'localhost', :port => 3000 }
 end

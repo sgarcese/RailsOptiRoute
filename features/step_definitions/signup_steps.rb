@@ -44,6 +44,20 @@ When /^I log in with the wrong credentials$/ do
   login(@user.email, "wrong password")
 end
 
+When /^I request to have my password reset$/ do
+  recover_password(@user.email)
+end
+
+When /^I request a new password for a non user$/ do
+  recover_password("notauser@example.com")
+end
+
+When /^I reset my password$/ do
+  recover_password(@user.email)
+  @user.reload
+  reset_password("newpassword123")
+end
+
 module LoginSteps
   def login(name, password)
     visit new_user_session_path
@@ -53,4 +67,20 @@ module LoginSteps
   end
 end
 
+module RecoverPasswordSteps
+  def recover_password(email)
+    visit new_user_password_path
+    fill_in 'user_email', :with => email
+    click_button("Send me reset password instructions")
+  end
+
+  def reset_password(password)
+    visit "#{Capybara.app_host}/users/password/edit?initial=true&reset_password_token=#{@user.reset_password_token}"
+    fill_in "user_password", :with => "awesome123"
+    fill_in "user_password_confirmation", :with => "awesome123"
+    click_button("Change my password")
+  end
+end
+
 World(LoginSteps)
+World(RecoverPasswordSteps)
