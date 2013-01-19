@@ -1,3 +1,5 @@
+require 'google_api'
+
 class LocationsController < ApplicationController
   # GET /locations
   # GET /locations.json
@@ -82,12 +84,15 @@ class LocationsController < ApplicationController
   end
 
   def verify_collection
-    @locations = params[:route][:locations_attributes]
+    @locations = params[:route][:locations_attributes].delete_if{ |index, hash| hash[:address_string].blank? }
     @verified_locations = []
 
-    @locations.each do |location|
-      location.last[:verified] = false
-      location.last[:verified_address] = "some new address"
+    @locations.each do |index, location|
+      verifier = GoogleAPI::GoogleLocation.new(location[:address_string])
+      verified_location = verifier.get_location
+      location[:index] = index
+      location[:verified] = verified_location == location
+      location[:verified_address] = verified_location
       @verified_locations << location
     end
 

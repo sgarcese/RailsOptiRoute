@@ -32,12 +32,12 @@
       type: "POST",
       data: $("form").serialize()
     }).done(function(data) {
-      jQuery.each(data, function(index, itemData) {
-        var addressInput = $("#route_locations_attributes_"+itemData[0]+"_address_string");
-        if (itemData[1].verified) {
+      jQuery.each(data, function(index, location) {
+        var addressInput = $("#route_locations_attributes_"+location.index+"_address_string");
+        if (location.verified) {
           $(addressInput).next("span.verified").html("valid");
         } else {
-          $(addressInput).next("span.verified").html("suggested correction: " + itemData[1].verified_address);
+          $(addressInput).next("span.verified").html("suggested correction: " + location.verified_address);
         }
       });
     });
