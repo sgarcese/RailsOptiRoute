@@ -1,15 +1,14 @@
 <p id="notice"><%= notice %></p>
 
 <p>
-  <b>User:</b>
-  <%= @route.user_id %>
-</p>
-
-<p>
   <b>Optimized:</b>
-  <%= @route.optimized %>
+  <%= @route.optimized ? "yes" : "no" %>
 </p>
 
+<% @route.locations.each do |location| %>
+  <p>
+    <b>location:</b>
+    <%= location.address_string %>
+  </p>
+<% end %>
 
-<%= link_to 'Edit', edit_route_path(@route) %> |
-<%= link_to 'Back', routes_path %>
