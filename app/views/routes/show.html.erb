@@ -16,3 +16,10 @@
     <%= location.address_string %>
   </p>
 <% end %>
+
+<div class="controls">
+  <%= link_to "Add Another Route", new_route_path, :class => "btn btn-inverse" %>
+  <%= link_to '<i class="icon-print"></i> print'.html_safe, "#", :class => "btn" %>
+  <%= link_to '<i class="icon-edit"></i> edit'.html_safe, edit_route_path(@route), :class => "btn" %>
+  <%= link_to '<i class="icon-trash"></i> delete'.html_safe, route_path(@route), :method => :delete, :confirm => "Are you sure?", :class => "btn" %>
+</div>

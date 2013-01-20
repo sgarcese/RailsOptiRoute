@@ -34,34 +34,15 @@ class RoutesController < ApplicationController
 
   def create
     @locations = params[:route][:locations_attributes].delete_if{ |index, hash| hash[:address_string].blank? }
-    @verified_locations = []
-
-    @locations.each do |index, location|
-      location[:start] = index == 0
-      location[:finish] = index == @locations.length-1
-
-      if location[:latitude].blank? || location[:longitude].blank?
-        location = add_verified_attributes_to_location(location) 
-        location[:user_id] = current_user.id
-      end
-
-      @verified_locations << location
-    end
-
-    params[:route][:locations_attributes] = @verified_locations
+    params[:route][:locations_attributes] = build_location_hashes(@locations)
     @route = Route.new(params[:route])
 
-    respond_to do |format|
-      if @route.save
-        format.html { redirect_to @route, notice: 'Route was successfully created.' }
-        format.json { render json: @route, status: :created, location: @route }
-      else
-        locations_to_build = 5 - @route.locations.to_a.count
-        locations_to_build.times { |i| @route.locations.build }
-
-        format.html { render action: "new" }
-        format.json { render json: @route.errors, status: :unprocessable_entity }
-      end
+    if @route.save
+      redirect_to @route, notice: 'Route was successfully created.'
+    else
+      locations_to_build = 5 - @route.locations.to_a.count
+      locations_to_build.times { |i| @route.locations.build }
+      render action: "new"
     end
   end
 
@@ -71,10 +52,8 @@ class RoutesController < ApplicationController
     respond_to do |format|
       if @route.update_attributes(params[:route])
         format.html { redirect_to @route, notice: 'Route was successfully updated.' }
-        format.json { head :no_content }
       else
         format.html { render action: "edit" }
-        format.json { render json: @route.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -82,19 +61,31 @@ class RoutesController < ApplicationController
   def destroy
     @route = Route.find(params[:id])
     @route.destroy
-
-    respond_to do |format|
-      format.html { redirect_to routes_url }
-      format.json { head :no_content }
-    end
+    redirect_to routes_path
   end
 
   private
-  def add_verified_attributes_to_location(location)
-    verification_service = AddressVerificationService.new(location[:address_string])
-    verified_attributes = verification_service.validated_address_attributes
-    location[:latitude] = verified_attributes[:latitude]
-    location[:longitude] = verified_attributes[:longitude]
-    location
-  end
+    def add_verified_attributes_to_location(location)
+      verification_service = AddressVerificationService.new(location[:address_string])
+      verified_attributes = verification_service.validated_address_attributes
+      location[:latitude] = verified_attributes[:latitude]
+      location[:longitude] = verified_attributes[:longitude]
+      location
+    end
+
+    def build_location_hashes(locations)
+      verified_locations = []
+      locations.each do |index, location|
+        location[:start] = index.to_i == 0
+        location[:finish] = index.to_i == locations.length-1
+        location[:user_id] = current_user.id
+
+        if location[:latitude].blank? || location[:longitude].blank?
+          location = add_verified_attributes_to_location(location) 
+        end
+
+        verified_locations << location
+      end
+      verified_locations
+    end
 end
