@@ -2,6 +2,7 @@ $navbarText: #000000;
 $navbarBackground: #FFFF00;
 $navbarBackgroundHighliht: #AAAA00;
 @import "bootstrap_and_overrides";
+@import "print";
 
 .content {
   background-color: #eee;
@@ -25,7 +26,7 @@ form.form-inline div.field {
   width: 48%;
 }
 
-.directions-panel{        
+.directions-panel {        
   height: 100%;        
   width: 390px;        
   overflow: auto;      
@@ -47,18 +48,7 @@ form.form-inline div.field {
   display: none;      
 }      
 
-@media print {        
-  .map-canvas {          
-    height: 500px;          
-    margin: 0;        
-  }
-  
-  .directions-panel {          
-    float: none;          
-    width: auto;        
-  }      
-}   
-.navbar .brand{
-	padding-top:    3px;
-	padding-bottom: 0px;
+.navbar .brand {
+  padding-top:    3px;
+  padding-bottom: 0px;
 }

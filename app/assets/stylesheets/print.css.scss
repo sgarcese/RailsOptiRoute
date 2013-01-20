@@ -1,0 +1,16 @@
+@media print {
+  .controls {
+    display: none;
+  }
+
+  .map-canvas {          
+    margin: 0;      
+    height: 300px;
+    width: 350px;
+  }
+
+  .directions-panel {          
+    float: none;          
+    width: auto;        
+  }         
+}
