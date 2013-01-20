@@ -94,6 +94,7 @@ module GoogleAPI
     #assumes that the input is an array of correctly formatted addresses
     #the first address is @start, the last is @finish
     def initialize(lats_and_lngs)
+      @lats_and_lngs      = lats_and_lngs
       @start              = lats_and_lngs.shift
       @finish             = lats_and_lngs.pop
       @waypoints          = [] || lats_and_lngs
@@ -102,6 +103,9 @@ module GoogleAPI
       @optimized          = false
       @json_response      = build_response
       @summary            = []
+      @defaultMapZoom      = 12
+      @defaultMapSize      = "400x350"
+      @apiKey             = "AIzaSyCk3z5kIzi65WoATUBPbJ7h3i5fyY7DlaQ"
     end
     
     def get_route  
@@ -124,7 +128,26 @@ module GoogleAPI
         @summary << "From: #{step["start_address"]}  To: #{step["end_address"]} Via: #{"summary"} Distance: #{step["distance"]["text"]} Duration: #{step["duration"]["text"]}"
       end
     end
-
+    
+    def unoptimized_map_url
+       uri        = URI('http://maps.googleapis.com/maps/api/staticmap')
+       map_center = find_map_center
+       params     = {center: map_center, zoom: @defaultMapZoom, size: @defaultMapSize}
+    end
+    def optimized_map_url
+       uri        = URI('http://maps.googleapis.com/maps/api/staticmap')
+       map_center = find_map_center
+       params     = {center: map_center, zoom: @defaultMapZoom, size: @defaultMapZoom}
+    end
+    def find_map_center
+        @lats_and_lngs.each do |lat_and_lng|
+          lats << lat_and_lng[0]
+          lngs << lat_and_lng[1]
+        end
+        lats_center = (lats.max - lats.min) /2
+        lngs_center = (lngs.max - lngs.min) /2
+        return "#{lats_center},#{lngs_center}"
+    end
     private
     def build_response
       uri       = URI('http://maps.googleapis.com/maps/api/directions/json')

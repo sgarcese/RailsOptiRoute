@@ -1,3 +1,6 @@
+$navbarText: #000000;
+$navbarBackground: #FFFF00;
+$navbarBackgroundHighliht: #AAAA00;
 @import "bootstrap_and_overrides";
 
 .content {
@@ -54,4 +57,8 @@ form.form-inline div.field {
     float: none;          
     width: auto;        
   }      
-}    
+}   
+.navbar .brand{
+	padding-top:    3px;
+	padding-bottom: 0px;
+}
