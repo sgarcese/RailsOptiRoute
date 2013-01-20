@@ -8,10 +8,10 @@
 </p>
 
 <h4><%= pluralize(@route.locations.count, 'location') %></h4>
+
 <% @route.locations.each do |location| %>
   <p>
     <b>address:</b>
     <%= location.address_string %>
   </p>
 <% end %>
-
