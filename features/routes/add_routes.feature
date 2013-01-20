@@ -16,13 +16,3 @@ Feature: Add Routes
     Given I am on the new route page
      When I add a route without a name
      Then I should see form errors
-
-  Scenario: view a list of routes
-    Given I have 2 routes
-     When I go to the routes page
-     Then I should see a list of routes
-
-  Scenario: view a single route
-    Given I created an "awesome" route
-     When I go to the "awesome" route page
-     Then I should see "Route: awesome"
