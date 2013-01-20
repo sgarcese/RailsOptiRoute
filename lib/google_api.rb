@@ -87,24 +87,30 @@ module GoogleAPI
     end
   end
   class GoogleRoute
-    attr_accessor :start, :finish, :waypoints, :distance, :duration, :waypoint_order, :optimized, :json_response, :summary
+    attr_accessor :start, :finish, :waypoints, :distance, :duration, :waypoint_index, :optimized, :json_response, :summary
     #assumes that the input is an array of correctly formatted addresses
     #the first address is @start, the last is @finish
     def initialize(lats_and_lngs)
-      @start         = lats_and_lngs.shift
-      @finish        = lats_and_lngs.pop
-      @waypoints     = [] || lats_and_lngs
-      @optimized     = false
-      @json_response = build_response
-      @summary = []
+      @start              = lats_and_lngs.shift
+      @finish             = lats_and_lngs.pop
+      @waypoints          = [] || lats_and_lngs
+      @waypoint_index     = []
+      @ordered_waypoints  = []
+      @optimized          = false
+      @json_response      = build_response
+      @summary            = []
     end
     
     def get_route  
       if @json_response["status"] == "OK"
-        self.duration = @json_response["routes"][0]["duration"]["value"]
-        self.distance = @json_response["routes"][0]["distance"]["value"]
-        self.formatted_address = @json_response["results"][0]["formatted_address"]
-        self.partial_match = 1 if @json_response["results"][0]["partial_match"]
+        self.duration          = @json_response["routes"][0]["duration"]["value"]
+        self.distance          = @json_response["routes"][0]["distance"]["value"]
+        self.waypoint_index    = @json_response["routes"][0]["waypoint_index"]
+        
+        @waypoint_index.each do |index|
+          @ordered_waypoints << @waypoints[index]
+        end
+        self.optimized          = true
       end
     end
     
@@ -118,11 +124,11 @@ module GoogleAPI
 
     private
     def build_response
-        uri     = URI('http://maps.googleapis.com/maps/api/directions/json')
-        params  = {:origin => start, :destination => finish, :waypoints => "optimize:true|#{waypoints.join("|")}"}
+        uri       = URI('http://maps.googleapis.com/maps/api/directions/json')
+        params    = {:origin => start, :destination => finish, :waypoints => "optimize:true|#{waypoints.join("|")}"}
         uri.query = URI.encode_www_form(params)
 
-        response                  = Net::HTTP.get_response(uri)
+        response  = Net::HTTP.get_response(uri)
         if response.is_a?(Net::HTTPSuccess)
           JSON.parse(response.body)
         else
