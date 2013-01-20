@@ -9,7 +9,7 @@
     <%= csrf_meta_tags %>
 	  <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCk3z5kIzi65WoATUBPbJ7h3i5fyY7DlaQ&sensor=false"></script>
     <%= yield(:head) %>
-  <body class="<%= controller_name %> <%= action_name %>">
+  <body class="<%= controller_name %> <%= action_name %>" style="background-image: url( <%= asset_path("bg_base.png") %> );">
     <header class="navbar navbar-fixed-top">
       <nav class="navbar-inner">
         <div class="container">
@@ -23,7 +23,7 @@
     </header>
     <div id="main" role="main">
       <div class="container">
-        <div class="content">
+        <div class="content" style="background-image: url( <%= asset_path("bg_texture_content.png") %> ); border: 1px solid #a1a1a1;">
            <div class="row">
             <div class="span12">
               <%= render 'layouts/messages' %>
