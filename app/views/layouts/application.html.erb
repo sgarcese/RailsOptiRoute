@@ -12,7 +12,7 @@
   <body class="<%= controller_name %> <%= action_name %>" style="background-image: url( <%= asset_path("bg_base.png") %> );">
     <header class="navbar navbar-fixed-top">
       <nav class="navbar-inner">
-        <div class="container">
+        <div class="container" style="position: relative;">
           <% if user_signed_in? %>
             <%= render 'layouts/app_navigation' %>
           <% else %>
