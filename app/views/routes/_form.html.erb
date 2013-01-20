@@ -31,7 +31,7 @@
   <div id="change_address" class="change-address modal hide fade">
     <div class="modal-header">
       <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-      <h3 id="myModalLabel">Modal header</h3>
+      <h3 id="myModalLabel">Address Corrections</h3>
     </div>
     <div class="modal-body">
       <p class="address"></p>
@@ -51,20 +51,32 @@
 <% end %>
 
 <script type="text/javascript">
-  $("a#verify_addresses").click(function(event) {
+  $('form').on('click', '#verify_addresses', function(event) {
     $.ajax({
       url: "<%= verify_collection_locations_path %>",
       type: "POST",
       data: $("form").serialize()
     }).done(function(data) {
+      $("#change_address p.address").html("");
       jQuery.each(data, function(index, location) {
         var addressInput = $("#route_locations_attributes_"+location.index+"_address_string");
         if (location.verified) {
           $(addressInput).next("span.verified").html("valid");
         } else {
-          $(addressInput).next("span.verified").html("suggested correction: " + location.verified_address);
+          var original_radio = '<label class="radio"><input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked> original: </label>';
+
+          var corrected_radio = '<label class="radio"><input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked> correctd: </label>';
+
+          $("#change_address p.address").append("<h5>Please select an address for location "+(location.index+1)+"</h5>");
+          $("#change_address p.address").append(original_radio + " " + location.address_string + "<br />");
+          $("#change_address p.address").append(corrected_radio + " " + location.verified_address + "<br />");
         }
       });
+    });
+
+    $('form').submit(function(event) {
+      $("#change_address").modal('show');
+      event.preventDefault();
     });
   });
 

@@ -37,11 +37,14 @@ class RoutesController < ApplicationController
     @verified_locations = []
 
     @locations.each do |index, location|
-      next if location[:latitude].present? && location[:longitude].present?
-      location = add_verified_attributes_to_location(location) 
-      location[:user_id] = current_user.id
       location[:start] = index == 0
-      location[:end] = index == @locations.length-1
+      location[:finish] = index == @locations.length-1
+
+      if location[:latitude].blank? || location[:longitude].blank?
+        location = add_verified_attributes_to_location(location) 
+        location[:user_id] = current_user.id
+      end
+
       @verified_locations << location
     end
 
@@ -55,14 +58,13 @@ class RoutesController < ApplicationController
       else
         locations_to_build = 5 - @route.locations.to_a.count
         locations_to_build.times { |i| @route.locations.build }
+
         format.html { render action: "new" }
         format.json { render json: @route.errors, status: :unprocessable_entity }
       end
     end
   end
 
-  # PUT /routes/1
-  # PUT /routes/1.json
   def update
     @route = Route.find(params[:id])
 
@@ -77,8 +79,6 @@ class RoutesController < ApplicationController
     end
   end
 
-  # DELETE /routes/1
-  # DELETE /routes/1.json
   def destroy
     @route = Route.find(params[:id])
     @route.destroy

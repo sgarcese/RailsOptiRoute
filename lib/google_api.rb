@@ -33,8 +33,8 @@ module GoogleAPI
     #Methods
     def initialize( *vararg )
       vararg_count = vararg.count
-      raise NoArgumentError unless vararg_count > 0
-      raise TooManyArgumentError unless vararg_count <3
+      raise NoArgumentError if vararg_count == 0
+      raise TooManyArgumentError if vararg_count >= 3
 
       if vararg_count == 1 
         self.address = vararg[0].to_s
