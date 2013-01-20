@@ -31,6 +31,7 @@ group :test do
   gem 'pickle'
   gem 'launchy'
   gem 'rspec-rails'
+  gem 'rspec-given'
   gem 'mocha'
   gem 'database_cleaner'
 end
