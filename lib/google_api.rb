@@ -96,10 +96,10 @@ module GoogleAPI
       @waypoints     = [] || lats_and_lngs
       @optimized     = false
       @json_response = build_response
+      @summary = []
     end
     
-    def get_route
-      
+    def get_route  
       if @json_response["status"] == "OK"
         self.duration = @json_response["routes"][0]["duration"]["value"]
         self.distance = @json_response["routes"][0]["distance"]["value"]
@@ -109,14 +109,13 @@ module GoogleAPI
     end
     
     def print_summary
+      return @summary unless @summary.empty?
       steps = @json_response["routes"][0]["steps"]
-      index = 0
       steps.each do |step|
-        @summary[index] = "From: #{step["start_address"]}  To: #{step["end_address"]} Via: #{"summary"} Distance: #{step["distance"]["text"]} Duration: #{step["duration"]["text"]}"
-        index = index + 1
+        @summary << "From: #{step["start_address"]}  To: #{step["end_address"]} Via: #{"summary"} Distance: #{step["distance"]["text"]} Duration: #{step["duration"]["text"]}"
       end
-      self.summary
     end
+
     private
     def build_response
         uri     = URI('http://maps.googleapis.com/maps/api/directions/json')
