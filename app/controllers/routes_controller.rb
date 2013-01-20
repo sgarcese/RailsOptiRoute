@@ -48,6 +48,8 @@ class RoutesController < ApplicationController
 
   def update
     @route = Route.find(params[:id])
+    @locations = params[:route][:locations_attributes].delete_if{ |index, hash| hash[:address_string].blank? }
+    params[:route][:locations_attributes] = build_location_hashes(@locations)
 
     respond_to do |format|
       if @route.update_attributes(params[:route])
