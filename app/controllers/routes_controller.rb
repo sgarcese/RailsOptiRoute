@@ -40,6 +40,8 @@ class RoutesController < ApplicationController
       next if location[:latitude].present? && location[:longitude].present?
       location = add_verified_attributes_to_location(location) 
       location[:user_id] = current_user.id
+      location[:start] = index == 0
+      location[:end] = index == @locations.length-1
       @verified_locations << location
     end
 

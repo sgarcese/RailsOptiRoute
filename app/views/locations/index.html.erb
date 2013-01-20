@@ -13,7 +13,7 @@
 
 <% @locations.each do |location| %>
   <tr>
-    <td><%= link_to (location.name||"location"), location %></td>
+    <td><%= link_to (location.name.present? ? location.name : "location"), location %></td>
     <td><%= location.route.name %></td>
     <td><%= location.address_string %></td>
     <td><%= location.start %></td>

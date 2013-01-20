@@ -7,7 +7,7 @@ class Route < ActiveRecord::Base
   validates_presence_of :name
   validate :has_locations
 
-  accepts_nested_attributes_for :locations
+  accepts_nested_attributes_for :locations, :allow_destroy => true
 
   private
   def has_locations

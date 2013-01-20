@@ -1,0 +1,12 @@
+<div class="field">
+  <%= l.label "name" %>
+  <%= l.text_field :name %>
+  <%= l.label "address" %>
+  <%= l.text_field :address_string, :class => "input-xxlarge" %>
+  <%= l.hidden_field :latitude %>
+  <%= l.hidden_field :longitude %>
+  <%= l.hidden_field :_destroy %>
+  <%= link_to "remove", '#', :class => "remove_fields" %>
+  <span class="verified"></span>
+</div>
+<br />
