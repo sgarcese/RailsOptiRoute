@@ -87,14 +87,14 @@ module GoogleAPI
     end
   end
   class GoogleRoute
-    attr_accessor :start, :finish, :waypoints, :distance, :duration, :waypoint_order, :optimized, :json_response
+    attr_accessor :start, :finish, :waypoints, :distance, :duration, :waypoint_order, :optimized, :json_response, :summary
     #assumes that the input is an array of correctly formatted addresses
     #the first address is @start, the last is @finish
     def initialize(lats_and_lngs)
       @start         = lats_and_lngs.shift
       @finish        = lats_and_lngs.pop
       @waypoints     = [] || lats_and_lngs
-      @optimized     = false  
+      @optimized     = false
       @json_response = build_response
     end
     
@@ -108,6 +108,15 @@ module GoogleAPI
       end
     end
     
+    def print_summary
+      steps = @json_response["routes"][0]["steps"]
+      index = 0
+      steps.each do |step|
+        @summary[index] = "From: #{step["start_address"]}  To: #{step["end_address"]} Via: #{"summary"} Distance: #{step["distance"]["text"]} Duration: #{step["duration"]["text"]}"
+        index = index + 1
+      end
+      self.summary
+    end
     private
     def build_response
         uri     = URI('http://maps.googleapis.com/maps/api/directions/json')
