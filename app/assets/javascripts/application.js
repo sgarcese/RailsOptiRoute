@@ -15,3 +15,4 @@
 //= require bootstrap
 //= require opti_route
 //= require location_form
+//= require map_and_directions

@@ -19,45 +19,40 @@
 
 <div class="controls">
   <%= link_to "Add Another Route", new_route_path, :class => "btn btn-inverse" %>
-  <%= link_to '<i class="icon-print"></i> print'.html_safe, "#", :class => "btn" %>
+  <%= link_to '<i class="icon-print"></i> print'.html_safe, "#", :class => "btn", :id => "print_button" %>
   <%= link_to '<i class="icon-edit"></i> edit'.html_safe, edit_route_path(@route), :class => "btn" %>
   <%= link_to '<i class="icon-trash"></i> delete'.html_safe, route_path(@route), :method => :delete, :confirm => "Are you sure?", :class => "btn" %>
 </div>
 
-<div id="map_canvas" style="float:left;width:70%; height:100%"></div>
-<div id="directionsPanel" style="float:right;width:30%;height 100%"></div>
+
+<div id="unoptimized">
+  <ul>
+    <li>Unoptimized Distance: <span id="unoptimized_distance">NA</span></li>
+  </ul>
+
+  <div id="unoptimized_map_canvas" class="map-canvas"></div>
+  <div id="unoptimized_directions_panel" class="directions-panel"></div>  
+</div>
+
+<div id="optimized">
+  <ul>
+    <li>optimized Distance: <span id="optimized_distance">NA</span></li>
+  </ul>
+
+  <div id="optimized_map_canvas" class="map-canvas"></div>
+  <div id="optimized_directions_panel" class="directions-panel"></div>  
+</div>
+
 
 <script type="text/javascript">
-  var directionsDisplay;
-  var directionsService = new google.maps.DirectionsService();
-  var map;
-  var haight = new google.maps.LatLng(37.7699298, -122.4469157);
-  var oceanBeach = new google.maps.LatLng(37.7683909618184, -122.51089453697205);
+  var locations = <%= raw @route.locations.to_json %>;
+  var addresses = <%= raw @route.locations.collect{|location| location.address_string}.to_json %>;
 
-  function initialize() {
-    directionsDisplay = new google.maps.DirectionsRenderer();
-    var mapOptions = {
-      zoom: 14,
-      mapTypeId: google.maps.MapTypeId.ROADMAP,
-      center: haight
-    }
-    map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
-    directionsDisplay.setMap(map);
-    directionsDisplay.setPanel(document.getElementById("directionsPanel"));
-  }
+  OptiRoute.mapAndDirections.renderUnoptimized(locations, addresses);
+  OptiRoute.mapAndDirections.renderOptimized(locations, addresses);
 
-  function calcRoute() {
-    var request = {
-      origin: haight,
-      destination: oceanBeach,
-      travelMode: google.maps.TravelMode.DRIVING
-    };
-    directionsService.route(request, function(response, status) {
-      if (status == google.maps.DirectionsStatus.OK) {
-        directionsDisplay.setDirections(response);
-      }
-    });
-  }
-
-  google.maps.event.addDomListener(window, 'load', initialize);  
+  $("#print_button").click(function(event) {
+    event.preventDefault();
+    window.print();
+  });
 </script>

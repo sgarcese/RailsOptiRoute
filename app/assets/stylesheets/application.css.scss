@@ -16,16 +16,22 @@ form.form-inline div.field {
   margin-bottom: 10px;
 }
 
-#directions-panel {        
-  display: block;
+#unoptimized,
+#optimized {
+  float: left;
+  width: 48%;
+}
+
+.directions-panel{        
   height: 100%;        
-  float: right;        
   width: 390px;        
   overflow: auto;      
 }      
 
-#map-canvas {        
-  margin-right: 400px;      
+.map-canvas {    
+  overflow: auto;
+  height: 400px;
+  width: 450px;
 }      
 
 #control {        
@@ -39,12 +45,12 @@ form.form-inline div.field {
 }      
 
 @media print {        
-  #map-canvas {          
+  .map-canvas {          
     height: 500px;          
     margin: 0;        
   }
   
-  #directions-panel {          
+  .directions-panel {          
     float: none;          
     width: auto;        
   }      
