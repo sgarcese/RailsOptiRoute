@@ -33,7 +33,17 @@ class RoutesController < ApplicationController
   end
 
   def create
-    params[:route][:locations_attributes].delete_if{ |index, hash| hash[:address_string].blank? }
+    @locations = params[:route][:locations_attributes].delete_if{ |index, hash| hash[:address_string].blank? }
+    @verified_locations = []
+
+    @locations.each do |index, location|
+      next if location[:latitude].present? && location[:longitude].present?
+      location = add_verified_attributes_to_location(location) 
+      location[:user_id] = current_user.id
+      @verified_locations << location
+    end
+
+    params[:route][:locations_attributes] = @verified_locations
     @route = Route.new(params[:route])
 
     respond_to do |format|
@@ -75,5 +85,14 @@ class RoutesController < ApplicationController
       format.html { redirect_to routes_url }
       format.json { head :no_content }
     end
+  end
+
+  private
+  def add_verified_attributes_to_location(location)
+    verification_service = AddressVerificationService.new(location[:address_string])
+    verified_attributes = verification_service.validated_address_attributes
+    location[:latitude] = verified_attributes[:latitude]
+    location[:longitude] = verified_attributes[:longitude]
+    location
   end
 end

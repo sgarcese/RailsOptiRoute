@@ -1,35 +1,23 @@
-<h1>Listing locations</h1>
+<h2>Listing locations</h2>
 
 <table>
   <tr>
-    <th>User</th>
-    <th>Route</th>
     <th>Name</th>
-    <th>Street</th>
-    <th>Street 2</th>
-    <th>City</th>
-    <th>State</th>
-    <th>Zip</th>
+    <th>Route</th>
+    <th>Address</th>
     <th>Start</th>
     <th>Finish</th>
-    <th></th>
     <th></th>
     <th></th>
   </tr>
 
 <% @locations.each do |location| %>
   <tr>
-    <td><%= location.user_id %></td>
-    <td><%= location.route_id %></td>
-    <td><%= location.name %></td>
-    <td><%= location.street %></td>
-    <td><%= location.street_2 %></td>
-    <td><%= location.city %></td>
-    <td><%= location.state %></td>
-    <td><%= location.zip %></td>
+    <td><%= link_to (location.name||"location"), location %></td>
+    <td><%= location.route.name %></td>
+    <td><%= location.address_string %></td>
     <td><%= location.start %></td>
     <td><%= location.finish %></td>
-    <td><%= link_to 'Show', location %></td>
     <td><%= link_to 'Edit', edit_location_path(location) %></td>
     <td><%= link_to 'Destroy', location, method: :delete, data: { confirm: 'Are you sure?' } %></td>
   </tr>
@@ -38,4 +26,4 @@
 
 <br />
 
-<%= link_to 'New Location', new_location_path %>
+<%= link_to 'New Location', new_location_path, :class => "btn btn-inverse" %>
