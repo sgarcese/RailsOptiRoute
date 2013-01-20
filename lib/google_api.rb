@@ -103,8 +103,8 @@ module GoogleAPI
       @optimized          = false
       @json_response      = build_response
       @summary            = []
-      DefaultMapZoom      = 12
-      DefaultMapSize      = "400x350"
+      @defaultMapZoom      = 12
+      @defaultMapSize      = "400x350"
       @apiKey             = "AIzaSyCk3z5kIzi65WoATUBPbJ7h3i5fyY7DlaQ"
     end
     
@@ -132,12 +132,12 @@ module GoogleAPI
     def unoptimized_map_url
        uri        = URI('http://maps.googleapis.com/maps/api/staticmap')
        map_center = find_map_center
-       params     = {center: map_center, zoom: DefaultMapZoom, size: DefaultMapSize}
+       params     = {center: map_center, zoom: @defaultMapZoom, size: @defaultMapSize}
     end
     def optimized_map_url
        uri        = URI('http://maps.googleapis.com/maps/api/staticmap')
        map_center = find_map_center
-       params     = {center: map_center, zoom: DefaultMapZoom, size: DefaultMapZoom}
+       params     = {center: map_center, zoom: @defaultMapZoom, size: @defaultMapZoom}
     end
     def find_map_center
         @lats_and_lngs.each do |lat_and_lng|
