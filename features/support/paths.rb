@@ -11,6 +11,13 @@ module NavigationHelpers
     when /the signup page/
       new_user_registration_path
 
+    when /the new route page/
+      new_route_path
+
+    when /the "([^\"]*)" route page/
+      route = Route.find_by_name($1)
+      route_path(route)
+
     else
       begin
         page_name =~ /^the (.*) page$/

@@ -6,14 +6,13 @@ RouteOptimization::Application.routes.draw do
         post :verify_collection
       end
     end
-    root :to => 'pages#home'
+    root :to => "routes#new"
   end
 
   devise_scope :user do
-    root :to => "routes#new"
     match '/user/confirmation' => 'confirmations#update', :via => :put, :as => :update_user_confirmation
   end
   
   devise_for :users, :controllers => { :confirmations => "confirmations" }
-  root :to => "home#landing"
+  root :to => "pages#landing"
 end

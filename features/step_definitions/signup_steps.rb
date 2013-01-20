@@ -58,6 +58,38 @@ When /^I reset my password$/ do
   reset_password("newpassword123")
 end
 
+When /^I add a route with (\d+) location(?:|s)$/ do |route_count|
+  route = Route.new(:name => "route #{route_count}", :user => @user)
+  route_count.to_i.times{ |i| route.locations.build(:address_string => "something", :user => @user, :name => "spot #{i}") }
+  route.save!
+end
+
+When /^I add a route without a name$/ do
+  route = Route.new(:user => @user)
+  2.times{ |i| route.locations.build(:address_string => "something #{i}", :user => @user, :name => "spot #{i}") }
+  route.save!
+end
+
+Given /^I have (\d+) routes$/ do |route_count|
+  route_count.to_i.times do |i|
+    route = Route.new(:name => "foo bar #{i}", :user => @user)
+    2.times{ |i| route.locations.build(:address_string => "something #{i}", :user => @user, :name => "spot #{i}") }
+    route.save!
+  end
+end
+
+Given /^I created an "([^"]*)" route$/ do |name|
+  route = Route.new(:name => name, :user => @user)
+  2.times{ |i| route.locations.build(:address_string => "something #{i}", :user => @user, :name => "spot #{i}") }
+  route.save!
+end
+
+Then /^I should see a list of routes$/ do
+  output = find('table').all('tr').map { |row| row.all('th, td').map { |cell| cell.text } }
+  data = output[0]
+  data.count.should > 1
+end
+
 module LoginSteps
   def login(name, password)
     visit new_user_session_path

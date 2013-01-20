@@ -75,18 +75,22 @@ class LocationsController < ApplicationController
     @verified_locations = []
 
     @locations.each do |index, location|
-      verifier = GoogleAPI::GoogleLocation.new(location[:address_string])
-      verified_location = verifier.get_location
-#      coordiates = verifier.get_latitude_and_longitude
-
       location[:index] = index
-      location[:verified] = verified_location == location
-      location[:verified_address] = verified_location
-      #location[:latitude] = coordiates["latitude"]
-      #location[:longitude] = coordiates["longitude"]
+      location = add_verified_attributes_to_location(location)
       @verified_locations << location
     end
 
     render json: @verified_locations
   end
+
+  private
+    def add_verified_attributes_to_location(location)
+      verification_service = AddressVerificationService.new(location[:address_string])
+      verified_attributes = verification_service.validated_address_attributes
+      location[:verified] = verified_attributes[:address] == location[:address_string]
+      location[:verified_address] = verified_attributes[:address]
+      location[:latitude] = verified_attributes[:latitude]
+      location[:longitude] = verified_attributes[:longitude]
+      location
+    end
 end
