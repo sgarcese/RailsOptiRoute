@@ -64,6 +64,7 @@ module GoogleAPI
     def lng2rad
       @lng * Math::PI / 180
     end
+
     private
     def build_response
       uri = URI('http://maps.googleapis.com/maps/api/geocode/json')
@@ -78,6 +79,7 @@ module GoogleAPI
       end
     end
   end
+
   class GoogleRoute
     class Runtime < RuntimeError; end
     class UnsuccessfullConnection < Runtime
@@ -86,6 +88,7 @@ module GoogleAPI
       end
     end
   end
+  
   class GoogleRoute
     attr_accessor :start, :finish, :waypoints, :distance, :duration, :waypoint_index, :optimized, :json_response, :summary
     #assumes that the input is an array of correctly formatted addresses
@@ -147,16 +150,16 @@ module GoogleAPI
     end
     private
     def build_response
-        uri       = URI('http://maps.googleapis.com/maps/api/directions/json')
-        params    = {:origin => start, :destination => finish, :waypoints => "optimize:true|#{waypoints.join("|")}"}
-        uri.query = URI.encode_www_form(params)
+      uri       = URI('http://maps.googleapis.com/maps/api/directions/json')
+      params    = {:origin => start, :destination => finish, :waypoints => "optimize:true|#{waypoints.join("|")}"}
+      uri.query = URI.encode_www_form(params)
 
-        response  = Net::HTTP.get_response(uri)
-        if response.is_a?(Net::HTTPSuccess)
-          JSON.parse(response.body)
-        else
-          raise UnsuccessfullConnection
-        end
+      response  = Net::HTTP.get_response(uri)
+      if response.is_a?(Net::HTTPSuccess)
+        JSON.parse(response.body)
+      else
+        raise UnsuccessfullConnection
       end
+    end
   end
 end

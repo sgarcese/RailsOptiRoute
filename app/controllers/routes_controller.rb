@@ -35,7 +35,7 @@ class RoutesController < ApplicationController
   def create
     @locations = params[:route][:locations_attributes].delete_if{ |index, hash| hash[:address_string].blank? }
     params[:route][:locations_attributes] = build_location_hashes(@locations)
-    @route = Route.new(params[:route])
+    @route = current_user.routes.new(params[:route])
 
     if @route.save
       redirect_to @route, notice: 'Route was successfully created.'

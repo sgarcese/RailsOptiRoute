@@ -23,3 +23,41 @@
   <%= link_to '<i class="icon-edit"></i> edit'.html_safe, edit_route_path(@route), :class => "btn" %>
   <%= link_to '<i class="icon-trash"></i> delete'.html_safe, route_path(@route), :method => :delete, :confirm => "Are you sure?", :class => "btn" %>
 </div>
+
+<div id="map_canvas" style="float:left;width:70%; height:100%"></div>
+<div id="directionsPanel" style="float:right;width:30%;height 100%"></div>
+
+<script type="text/javascript">
+  var directionsDisplay;
+  var directionsService = new google.maps.DirectionsService();
+  var map;
+  var haight = new google.maps.LatLng(37.7699298, -122.4469157);
+  var oceanBeach = new google.maps.LatLng(37.7683909618184, -122.51089453697205);
+
+  function initialize() {
+    directionsDisplay = new google.maps.DirectionsRenderer();
+    var mapOptions = {
+      zoom: 14,
+      mapTypeId: google.maps.MapTypeId.ROADMAP,
+      center: haight
+    }
+    map = new google.maps.Map(document.getElementById("map_canvas"), mapOptions);
+    directionsDisplay.setMap(map);
+    directionsDisplay.setPanel(document.getElementById("directionsPanel"));
+  }
+
+  function calcRoute() {
+    var request = {
+      origin: haight,
+      destination: oceanBeach,
+      travelMode: google.maps.TravelMode.DRIVING
+    };
+    directionsService.route(request, function(response, status) {
+      if (status == google.maps.DirectionsStatus.OK) {
+        directionsDisplay.setDirections(response);
+      }
+    });
+  }
+
+  google.maps.event.addDomListener(window, 'load', initialize);  
+</script>
