@@ -2,23 +2,28 @@ require 'net/http'
 require 'json'
 
 module GoogleAPI
+
   class GoogleLocation
     #Errors
     class Runtime < RuntimeError; end
+
     class NoArgumentError < Runtime
       def message
         "Insuficient input arguments"
       end
     end
+
     class TooManyArgumentError <Runtime
       def message
         "Excesive input arguments"
       end
     end
+
     class UnsuccessfullConnection <Runtime
       def message
         "The connection to the address validation server was unsuccsesful"
       end
+    end
   end
 
   class GoogleLocation
@@ -106,7 +111,7 @@ module GoogleAPI
     private
     def build_response
         uri     = URI('http://maps.googleapis.com/maps/api/directions/json')
-        params  = {origin: start, destination:finish, waypoints:"optimize:true|#{waypoints.join("|")}"}
+        params  = {:origin => start, :destination => finish, :waypoints => "optimize:true|#{waypoints.join("|")}"}
         uri.query = URI.encode_www_form(params)
 
         response                  = Net::HTTP.get_response(uri)

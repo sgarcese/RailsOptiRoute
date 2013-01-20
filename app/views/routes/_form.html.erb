@@ -11,6 +11,11 @@
     </div>
   <% end %>
 
+  <div class="field">
+    <%= f.label "name" %>
+    <%= f.text_field :name, :placeholder => "My First Route" %>
+  </div>
+
   <% index = 0 %>
   <%= f.fields_for :locations do |l| %>
     <% index += 1 %>

@@ -59,15 +59,25 @@ When /^I reset my password$/ do
 end
 
 When /^I add a route with (\d+) location(?:|s)$/ do |route_count|
-  route = Route.new(:name => "route #{route_count}", :user => @user)
-  route_count.to_i.times{ |i| route.locations.build(:address_string => "something", :user => @user, :name => "spot #{i}") }
-  route.save!
+  visit new_route_path
+  index = 0
+
+  fill_in "route_name", :with => "#{route_count} routes"
+  route_count.to_i.times do |i|
+    fill_in "route_locations_attributes_#{index}_name", :with => "spot #{index}"
+    fill_in "route_locations_attributes_#{index}_address_string", :with => "#{index+1} easy street"
+    index+=1
+  end
+  
+  click_button('Create My Route')
 end
 
 When /^I add a route without a name$/ do
-  route = Route.new(:user => @user)
-  2.times{ |i| route.locations.build(:address_string => "something #{i}", :user => @user, :name => "spot #{i}") }
-  route.save!
+  visit new_route_path
+    
+  fill_in "route_locations_attributes_0_name", :with => "spot 0"
+  fill_in "route_locations_attributes_0_address_string", :with => "1 easy street"
+  click_button('Create My Route')
 end
 
 Given /^I have (\d+) routes$/ do |route_count|
