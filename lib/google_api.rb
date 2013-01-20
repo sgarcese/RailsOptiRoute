@@ -91,7 +91,6 @@ module GoogleAPI
     #assumes that the input is an array of correctly formatted addresses
     #the first address is @start, the last is @finish
     def initialize(lats_and_lngs)
-<<<<<<< HEAD
       @start              = lats_and_lngs.shift
       @finish             = lats_and_lngs.pop
       @waypoints          = [] || lats_and_lngs
@@ -99,14 +98,7 @@ module GoogleAPI
       @ordered_waypoints  = []
       @optimized          = false
       @json_response      = build_response
-=======
-      @start         = lats_and_lngs.shift
-      @finish        = lats_and_lngs.pop
-      @waypoints     = [] || lats_and_lngs
-      @optimized     = false
-      @json_response = build_response
-      @summary = []
->>>>>>> 6dbbcc6eb3e696676f97f3c60a4437c96f5cd538
+      @summary            = []
     end
     
     def get_route  
@@ -115,7 +107,7 @@ module GoogleAPI
         self.distance          = @json_response["routes"][0]["distance"]["value"]
         self.waypoint_index    = @json_response["routes"][0]["waypoint_index"]
         
-        @waypoint_index each do |index|
+        @waypoint_index.each do |index|
           @ordered_waypoints << @waypoints[index]
         end
         self.optimized          = true
