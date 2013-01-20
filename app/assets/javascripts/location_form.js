@@ -70,11 +70,12 @@ OptiRoute.location_form = {
 
   verifyAddresses: function() {
     var self = this;
+    var data = $(self.form).find('input[name!=_method]').serialize();
 
     $.ajax({
       url: "/locations/verify_collection",
-      type: "POST",
-      data: $(self.form).serialize()
+      type: "post",
+      data: data
     }).done(function(data) {
       self.verifiedAddresses = data;
       var valid = self.handleVerification(data);
